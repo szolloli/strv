@@ -5,24 +5,25 @@ import {
   GestureResponderEvent,
   Pressable,
   StyleSheet,
+  ActivityIndicator,
 } from "react-native";
 import React from "react";
 import Colors from "@/constants/Colors";
 import Text from "./Text";
 
-type ButtonTheme = "primary" | "secondary" | "danger" | "success";
+type ButtonTheme = "disabled" | "neutral" | "danger" | "success";
 type ButtonSize = "large" | "small";
 
 const ButtonColors = {
-  primary: Colors.disabled,
-  secondary: Colors.background.secondary,
+  disabled: Colors.disabled,
+  neutral: Colors.background.secondary,
   danger: Colors.red,
   success: Colors.green,
 };
 
 const ButtonFontColors = {
-  primary: Colors.text.lightGray,
-  secondary: Colors.text.black,
+  disabled: Colors.text.lightGray,
+  neutral: Colors.text.black,
   danger: Colors.text.white,
   success: Colors.text.white,
 };
@@ -34,6 +35,7 @@ export type ButtonProps = {
   textStyle?: StyleProp<TextStyle>;
   size?: ButtonSize;
   theme?: ButtonTheme;
+  loading?: boolean;
   disabled?: boolean;
 };
 
@@ -43,7 +45,8 @@ export default function Button({
   viewStyle,
   textStyle,
   size = "small",
-  theme = "primary",
+  theme = "disabled",
+  loading = false,
   disabled = false,
 }: ButtonProps) {
   const buttonStyles = getButtonStyle(theme, size);
@@ -58,20 +61,24 @@ export default function Button({
         viewStyle,
       ]}
     >
-      <Text
-        bold
-        variant={size == "small" ? "bodySmall" : "bodyMedium"}
-        style={[buttonStyles.text, textStyle]}
-      >
-        {title}
-      </Text>
+      {loading ? (
+        <ActivityIndicator />
+      ) : (
+        <Text
+          bold
+          variant={size == "small" ? "bodySmall" : "bodyMedium"}
+          style={[buttonStyles.text, textStyle]}
+        >
+          {title}
+        </Text>
+      )}
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 8,
+    borderRadius: 4,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
@@ -81,7 +88,8 @@ const styles = StyleSheet.create({
   },
   large: {
     minHeight: 56,
-    width: "100%",
+    alignSelf: "stretch",
+    borderRadius: 8,
   },
   small: {
     minHeight: 32,
