@@ -14,10 +14,13 @@ type TextVariant =
   | "bodySmall"
   | "bodyXSmall"
   | "overlineSmall";
+
+type textAlign = "left" | "center" | "right";
 export type TextProps = {
   children: React.ReactNode;
   style?: StyleProp<TextStyle>;
   variant?: TextVariant;
+  textAling?: textAlign;
   bold?: boolean;
 };
 
@@ -25,11 +28,18 @@ export default function Text({
   children,
   style,
   variant = "bodyMedium",
+  textAling = "left",
   bold = false,
 }: TextProps) {
   return (
     <NativeText
-      style={[styles.default, styles[variant], bold && styles.bold, style]}
+      style={[
+        styles.default,
+        styles[variant],
+        styles[textAling],
+        bold && styles.bold,
+        style,
+      ]}
     >
       {children}
     </NativeText>
@@ -38,45 +48,48 @@ export default function Text({
 
 const styles = StyleSheet.create({
   default: {
-    fontFamily: "Inter",
+    fontFamily: "Inter_400Regular",
+  },
+  left: {
     textAlign: "left",
   },
+  center: {
+    textAlign: "center",
+  },
+  right: {
+    textAlign: "right",
+  },
   bold: {
-    fontWeight: "700",
+    fontFamily: "Inter_700Bold",
   },
   titleLarge: {
     fontSize: 24,
-    fontWeight: "400",
     lineHeight: 28,
   },
   titleMedium: {
     fontSize: 20,
-    fontWeight: "500",
+    fontFamily: "Inter_500Medium",
     lineHeight: 24,
   },
   bodyLarge: {
     fontSize: 18,
-    fontWeight: "400",
     lineHeight: 24,
   },
   bodyMedium: {
     fontSize: 16,
-    fontWeight: "400",
     lineHeight: 20,
   },
   bodySmall: {
     fontSize: 14,
-    fontWeight: "400",
     lineHeight: 18,
   },
   bodyXSmall: {
     fontSize: 12,
-    fontWeight: "400",
     lineHeight: 16,
   },
   overlineSmall: {
     fontSize: 12,
-    fontWeight: "700",
+    fontFamily: "Inter_700Bold",
     lineHeight: 16,
     letterSpacing: 0.48,
   },
